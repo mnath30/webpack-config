@@ -2,11 +2,26 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
 module.exports = {
-  mode: "production",
-  entry: { index: "./src/index.js", print: "./src/print.js" },
+  mode: "development",
+  entry: {
+    print: {
+      import: "./src/print.js",
+      dependOn: "shared",
+    },
+    index: {
+      import: "./src/index.js",
+      dependOn: "shared",
+    },
+    anotherModule: {
+      import: "./src/anotherModule.js",
+      dependOn: "shared",
+    },
+    shared: "lodash",
+  },
   devServer: {
     static: "./dist",
   },
+  devtool: "inline-source-map",
   module: {
     rules: [
       {
@@ -38,5 +53,18 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].bundle.js",
     clean: true,
+  },
+  optimization: {
+    runtimeChunk: "single",
+    splitChunks: {
+      cacheGroups: {
+        node_vendors: {
+          name: "vendor",
+          test: /[\\/]node_modules[\\/]/,
+          chunks: "all",
+          priority: 1,
+        },
+      },
+    },
   },
 };
