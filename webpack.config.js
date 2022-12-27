@@ -53,6 +53,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].bundle.js",
     clean: true,
+    publicPath: "/webpack-config/",
   },
   optimization: {
     runtimeChunk: "single",
